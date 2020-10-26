@@ -27,7 +27,7 @@
     dest:           "{{ suricata_rule_path }}"
     mode:           0644
   when:
-    - suricata_enable  is true
+    - suricata_enable | bool
     - suricata_update_enable == 'disabled'
 
 - name:             "software_sensor_update_only: Refresh Script Index"
@@ -86,7 +86,7 @@
   command:          zkg upgrade {{ item.name }} --force
   with_items:       "{{ zeek_packages }}"
   when:
-    - 'item.auto_upgrade is true'
+    - 'item.auto_upgrade | bool'
     - 'item.name in installed_scripts.stdout'
   register:         results
   changed_when:

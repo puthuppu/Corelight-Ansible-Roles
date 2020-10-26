@@ -15,20 +15,20 @@
   include_tasks:    debian.yml
   when:
     - "ansible_os_family == 'Debian'"
-    -  sensor_update_only is false
+    -  not sensor_update_only | bool
 
 - name:             "main: Include RHEL Tasks"
   include_tasks:    redhat.yml
   when:
     - "ansible_os_family == 'RedHat'"
-    -  sensor_update_only is false
+    -  not sensor_update_only | bool
 
 - name:             "main: Include Software Sensor Common Tasks"
   include_tasks:    software_sensor_common.yml
   when:
     - "'software_sensors' in group_names"
-    - sensor_update_only is false
+    - not sensor_update_only | bool
 
 - name:             "main: Include Software Sensor Update Only Tasks"
   include_tasks:    software_sensor_update_only.yml
-  when:             sensor_update_only is true
+  when:             sensor_update_only | bool

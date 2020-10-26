@@ -23,7 +23,7 @@
   command:          zkg upgrade {{ item.name }} --force
   with_items:       "{{ zeek_packages }}"
   when:
-    - 'item.auto_upgrade is true'
+    - 'item.auto_upgrade | bool'
     - 'item.name in installed_scripts.stdout'
   register:         results
   changed_when:

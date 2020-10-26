@@ -6,12 +6,12 @@
       set_fact:
         enable_cron_job:    absent
       when:
-        - (enable_cron is false or suricata_update_enable != 'local')
+        - (not enable_cron | bool or suricata_update_enable != 'local')
     - name:                 Set_fact present
       set_fact:
         enable_cron_job:     present
       when:
-        - enable_cron is true
+        - enable_cron | bool
         - suricata_update_enable == 'local'
 
 
@@ -49,7 +49,7 @@
         owner:          "{{ ansible_user }}"
         group:          "{{ ansible_user }}"
   when:
-    - enable_cron is true
+    - enable_cron | bool
 
 - name:           "cron_update_host: Tasks when ansible_connection != local"
   block:
@@ -116,7 +116,7 @@
         mode:           u=rwx,g=rx,o=rx
   when:
     - "ansible_connection != 'local'"
-    - enable_cron is true
+    - enable_cron | bool
 
 - name:             "cron_update_host: Create Suricata-update local cron file"
   template:
@@ -127,7 +127,7 @@
     mode:           u=rwx,g=rx,o=rx
   when:
     - "ansible_connection == 'local'"
-    - enable_cron is true
+    - enable_cron | bool
 
 - name:               "cron_update_host: Ensure Suricata-update runs daily on Cron Job host"
   cron:
